@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="input-group">
+  <%= form_with(url: texts_path, method: :get, data: {turbo_frame: "texts"}) do |form| %>
+
+    <%= form.label :query, "Search for prompts:", class: "block mb-2" %>
+    <div class="form-outline">
+      <%= form.text_field :query, class: "form-control" %>
+
+      <%= form.submit 'Search', class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
+
+<h1>Found Texts</h1>
+
+<div class="">
+  <%= render "texts", texts: @texts %>
+</div>

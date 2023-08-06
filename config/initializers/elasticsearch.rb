@@ -1,0 +1,1 @@
+Searchkick.client = OpenSearch::Client.new(host: ENV['ELASTICSEARCH_URL'])

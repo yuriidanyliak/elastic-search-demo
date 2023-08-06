@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  db:
+    image: 'postgres:latest'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
+    hostname: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+      - network.host=0.0.0.0
+      - http.host=0.0.0.0
+    volumes:
+      - ./docker_data/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  web:
+    build: ./ 
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/docker/app
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    env_file: .env
+    depends_on:
+      - db
+      - elasticsearch
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
+volumes:
+  db_data:
