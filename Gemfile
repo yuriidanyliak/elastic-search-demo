@@ -23,3 +23,5 @@ gem "bootsnap", require: false
 
 gem 'searchkick'
 gem 'opensearch-ruby'
+
+gem 'dotenv-rails', groups: [:development, :test]
